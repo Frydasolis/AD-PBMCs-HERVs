@@ -1,20 +1,20 @@
 ```bash
 #!/bin/bash
 
-# directorios
+# 
 BAM_DIR="/storage/lemus_g/roldan/AD/Stellarscope/cellsort"
 OUT_BASE="/storage/lemus_g/roldan/AD/stellarscope/results"
 LOG_DIR="/storage/lemus_g/roldan/AD/stellarscope/logs"
 SCRIPT_DIR="/storage/lemus_g/roldan/AD/stellarscope/scripts"
 
-# recursos
+# 
 GTF="/storage/lemus_g/roldan/AD/resources/retro_plus_herpes.gtf"
 
 mkdir -p $OUT_BASE
 mkdir -p $LOG_DIR
 mkdir -p $SCRIPT_DIR
 
-# loop sobre BAMs
+# loop 
 for BAM in ${BAM_DIR}/*.Aligned.sortedByCB.bam
 do
 
