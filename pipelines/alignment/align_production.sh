@@ -5,11 +5,11 @@
 #SBATCH --time=72:00:00
 #SBATCH --output=/storage/lemus_g/roldan/AD/alignment_%j.out
 
-# --- ACTIVAR ENTORNO ---
+# ------
 source /home/roldan/anaconda3/etc/profile.d/conda.sh || source /home/roldan/miniconda3/etc/profile.d/conda.sh || source /etc/profile.d/conda.sh
 conda activate star_env
 
-# --- RUTAS ACTUALIZADAS ---
+# ------
 FASTQ_DIR="/storage/lemus_g/roldan/AD/fastqs_finales"
 INDEX="/home/roldan/AD/resources/index_human_herpes"
 WHITELIST="/home/roldan/AD/resources/737K-august-2016.txt"
@@ -18,7 +18,7 @@ OUT_DIR="/storage/lemus_g/roldan/AD/results"
 
 mkdir -p $OUT_DIR
 
-# --- PROCESAMIENTO ---
+# ------
 DONORS=$(tail -n +2 "$PLAN" | cut -d',' -f1 | sort -u)
 
 for GSM in $DONORS; do
@@ -41,7 +41,7 @@ for GSM in $DONORS; do
     R3_FILES=${R3_FILES%,}
 
     if [[ -n "$R4_FILES" ]]; then
-        # Ruta absoluta de STAR para evitar errores de comando no encontrado
+        
         /home/roldan/.conda/envs/star_env/bin/STAR --runThreadN 16 \
              --genomeDir "$INDEX" \
              --readFilesIn "$R4_FILES" "$R3_FILES" \
