@@ -1,0 +1,57 @@
+```bash
+#!/bin/bash
+
+# directorios
+BAM_DIR="/storage/lemus_g/roldan/AD/Stellarscope/cellsort"
+OUT_BASE="/storage/lemus_g/roldan/AD/stellarscope/results"
+LOG_DIR="/storage/lemus_g/roldan/AD/stellarscope/logs"
+SCRIPT_DIR="/storage/lemus_g/roldan/AD/stellarscope/scripts"
+
+# recursos
+GTF="/storage/lemus_g/roldan/AD/resources/retro_plus_herpes.gtf"
+
+mkdir -p $OUT_BASE
+mkdir -p $LOG_DIR
+mkdir -p $SCRIPT_DIR
+
+# loop sobre BAMs
+for BAM in ${BAM_DIR}/*.Aligned.sortedByCB.bam
+do
+
+    SAMPLE=$(basename $BAM .Aligned.sortedByCB.bam)
+
+    OUTDIR="${OUT_BASE}/${SAMPLE}"
+
+    cat > ${SCRIPT_DIR}/stellarscope_${SAMPLE}.sh <<EOF
+#!/bin/bash
+#SBATCH --job-name=st_${SAMPLE}
+#SBATCH --output=${LOG_DIR}/${SAMPLE}.out
+#SBATCH --error=${LOG_DIR}/${SAMPLE}.err
+#SBATCH --time=48:00:00
+#SBATCH --cpus-per-task=12
+#SBATCH --mem=120G
+
+source ~/.bashrc
+conda activate stellarscope_protocol_env
+
+mkdir -p ${OUTDIR}
+
+stellarscope assign \
+    --exp_tag ${SAMPLE} \
+    --outdir ${OUTDIR} \
+    --nproc 12 \
+    --stranded_mode F \
+    --whitelist /storage/lemus_g/roldan/results/\
+    --pooling_mode individual \
+    --reassing_mode best_exclude \
+    --max_iter 500 \
+    --updated_sam \
+    /storage/lemus_g/roldan/AD/Stellarscope/cellsort
+    --logfile ${LOG_DIR}/${SAMPLE}.log
+
+EOF
+
+    sbatch ${SCRIPT_DIR}/stellarscope_${SAMPLE}.sh
+
+done
+```
