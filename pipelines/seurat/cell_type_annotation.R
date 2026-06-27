@@ -75,3 +75,10 @@ plot_final_umap <- DimPlot(
 
 # 
 ggsave(
+# Save final Seurat object with cell type annotation
+saveRDS(
+  seurat_obj,
+  file = "seurat_object_complete_celltype.rds"
+)
+
+message("Seurat object saved successfully: seurat_object_complete_celltype.rds")
